@@ -1,0 +1,7 @@
+{
+  "schemaType": "LAUNCHER",
+  "id": "nrdb-query-launcher",
+  "displayName": "NrdbQueryLauncher",
+  "description": "Describe me",
+  "rootNerdletId": "fd279161-717d-43c0-bbd0-55dab06ffc50.nrdb-query-builder"
+}
