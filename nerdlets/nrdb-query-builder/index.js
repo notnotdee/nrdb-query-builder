@@ -11,29 +11,23 @@ import {
 // https://docs.newrelic.com/docs/new-relic-programmable-platform-introduction
 
 export default class NrdbQueryBuilderNerdlet extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      userInputQueryStr: "",
-      testQueryStr: "",
-      accountId: 1,
-    };
-    this.handleUserInput = this.handleUserInput.bind(this);
-  }
+  state = {
+    userInputQueryStr: "",
+    submittedQueryStr: "",
+    accountId: 1,
+  };
 
-  handleUserInput() {
+  handleUserSubmit = () => {
     const { userInputQueryStr } = this.state;
     this.setState({
-      testQueryStr: userInputQueryStr,
+      submittedQueryStr: userInputQueryStr,
       userInputQueryStr: "",
     });
-  }
+  };
 
   render() {
-    const { accountId, userInputQueryStr, testQueryStr } = this.state;
-    // console.log("testInput: ", testQueryStr, "userInput: ", userInputQueryStr);
+    const { accountId, submittedQueryStr } = this.state;
 
-    // to construct a query suggestion tool, will we have access to an API containing all possible query fields?
     const query = ngql`query($id: Int!, $query: Nrql!) {
           actor {
             account(id: $id) {
@@ -47,7 +41,7 @@ export default class NrdbQueryBuilderNerdlet extends React.Component {
 
     const variables = {
       id: accountId,
-      query: testQueryStr,
+      query: submittedQueryStr,
     };
 
     return (
@@ -60,10 +54,9 @@ export default class NrdbQueryBuilderNerdlet extends React.Component {
               this.setState({ userInputQueryStr: target.value })
             }
           />
-          <Button onClick={this.handleUserInput}>Submit</Button>
+          <Button onClick={this.handleUserSubmit}>Submit</Button>
         </Form>
-        {/* NerdGraphQuery must wait for a valid user-entered query (conditional rendering) in order to work properly */}
-        {testQueryStr && (
+        {submittedQueryStr && (
           <NerdGraphQuery query={query} variables={variables}>
             {({ loading, error, data }) => {
               if (loading) {
